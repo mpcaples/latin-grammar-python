@@ -97,4 +97,10 @@ def generate_sentence ():
     return sentence 
 
 
-print(generate_sentence())
+
+def main(): 
+    print(generate_sentence())
+
+if __name__ == '__main__': 
+
+    main()
