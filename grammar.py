@@ -1,15 +1,7 @@
 import random 
 import re
+from vocab import vocab
 
-vocab = {
-    "nouns": [
-        {"nom": "puella", "gen": "puellae", "gender": "fem"}, 
-        {"nom": "ager", "gen": "agris", "gender": "masc"},
-        {"nom": "puer", "gen": "pueri", "gender": "masc"},
-        {"nom": "fructus", "gen": "fructus", "gender": "masc"}, 
-        {"nom": "dies", "gen": "diei", "gender": "masc"}
-    ], 
-    "verbs": ['amat', 'videt', 'vexat', 'verberat']}
 
 def get_decl(noun): 
 
