@@ -60,6 +60,10 @@ def make_subject (noun):
 # e.g. a call to the following function: 
 #       make_direct_object(find_noun_base(noun), get_decl(noun))
 def make_DO_version2 (base, decl):
+    """
+    Returns the accusative form of a noun based on its base and declension 
+    
+    """
     ending = ""
     if decl == 1: 
         ending = "am"
@@ -74,18 +78,34 @@ def make_DO_version2 (base, decl):
     accusative = base + ending 
     return accusative
 
+def make_adjective_agree (subject, adjective):
+    '''
+    Returns an adjective that agrees in case, number, and gender with the noun which is in the parameter 
+    NOTE: for now it will just modify the subject, but in future versions tweak so it can modify subject, DO, or both
+    '''
+    adjective_base = re.sub('a$', "", adjective)
+    if subject['gender'] == 'fem': 
+        return adjective
+    elif subject['gender'] == 'neut': 
+        return adjective_base + 'um'
+    else: 
+        return adjective_base + "us"
+
+
 
 def generate_sentence (): 
     '''
-    Trivial subset of the Latin language 
+    Generates a sentence randomly, from a trivial subset of the Latin language.  
     '''
-
-    subject = make_subject(random.choice(vocab["nouns"]))
+    subject_base = random.choice(vocab["nouns"])
+    subject = make_subject(subject_base)
     dir_obj = random.choice(vocab["nouns"])
     dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj))
     verb = random.choice(vocab["verbs"])
+    adjective = random.choice(vocab["adjectives"])
+    adjective = make_adjective_agree(subject_base, adjective)
 
-    sentence = subject + " " + dir_obj + " " + verb
+    sentence = subject + " " + adjective + " " + dir_obj + " " + verb
     return sentence 
 
 

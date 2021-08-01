@@ -6,5 +6,6 @@ vocab = {
         {"nom": "fructus", "gen": "fructus", "gender": "masc"}, 
         {"nom": "dies", "gen": "diei", "gender": "masc"}
     ], 
-    "verbs": ['amat', 'videt', 'vexat', 'verberat']}
+    "verbs": ['amat', 'videt', 'vexat', 'verberat'], 
+    "adjectives": ['laeta', 'fessa', 'magna']}
 
