@@ -1,11 +1,14 @@
+import json
+
+with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\vocab_scraper\nouns.json', 'r') as fp:
+    nouns = json.load(fp)
+with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\vocab_scraper\verbs.json', 'r') as fp:
+    verbs = json.load(fp)
+
+
 vocab = {
-    "nouns": [
-        {"nom": "puella", "gen": "puellae", "gender": "fem"}, 
-        {"nom": "ager", "gen": "agris", "gender": "masc"},
-        {"nom": "puer", "gen": "pueri", "gender": "masc"},
-        {"nom": "fructus", "gen": "fructus", "gender": "masc"}, 
-        {"nom": "dies", "gen": "diei", "gender": "masc"}
-    ], 
-    "verbs": ['amat', 'videt', 'vexat', 'verberat'], 
+    "nouns": nouns, 
+    "verbs": verbs, 
     "adjectives": ['laeta', 'fessa', 'magna']}
+
 

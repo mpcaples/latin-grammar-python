@@ -84,13 +84,17 @@ def make_adjective_agree (subject, adjective):
     NOTE: for now it will just modify the subject, but in future versions tweak so it can modify subject, DO, or both
     '''
     adjective_base = re.sub('a$', "", adjective)
-    if subject['gender'] == 'fem': 
+    if subject['gender'] == 'Feminine': 
         return adjective
-    elif subject['gender'] == 'neut': 
+    elif subject['gender'] == 'Neuter': 
         return adjective_base + 'um'
     else: 
         return adjective_base + "us"
 
+def get_third_person_verb (verb_stem): 
+    verb = verb_stem["second"]
+    verb = re.sub('re$', "t", verb)
+    return verb
 
 
 def generate_sentence (): 
@@ -98,10 +102,11 @@ def generate_sentence ():
     Generates a sentence randomly, from a trivial subset of the Latin language.  
     '''
     subject_base = random.choice(vocab["nouns"])
+    verb_stem = random.choice(vocab["verbs"])
     subject = make_subject(subject_base)
     dir_obj = random.choice(vocab["nouns"])
     dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj))
-    verb = random.choice(vocab["verbs"])
+    verb = get_third_person_verb(verb_stem)
     adjective = random.choice(vocab["adjectives"])
     adjective = make_adjective_agree(subject_base, adjective)
 
