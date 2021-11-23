@@ -4,11 +4,12 @@ with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\v
     nouns = json.load(fp)
 with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\vocab_scraper\verbs.json', 'r') as fp:
     verbs = json.load(fp)
-
+with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\vocab_scraper\adjectives.json', 'r') as fp:
+    adjectives = json.load(fp)
 
 vocab = {
     "nouns": nouns, 
     "verbs": verbs, 
-    "adjectives": ['laeta', 'fessa', 'magna']}
+    "adjectives": adjectives}
 
 

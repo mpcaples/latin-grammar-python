@@ -83,7 +83,8 @@ def make_adjective_agree (subject, adjective):
     Returns an adjective that agrees in case, number, and gender with the noun which is in the parameter 
     NOTE: for now it will just modify the subject, but in future versions tweak so it can modify subject, DO, or both
     '''
-    adjective_base = re.sub('a$', "", adjective)
+    adj = adjective["fem"]
+    adjective_base = re.sub('a$', "", adj)
     if subject['gender'] == 'Feminine': 
         return adjective
     elif subject['gender'] == 'Neuter': 
