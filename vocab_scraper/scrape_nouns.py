@@ -32,19 +32,60 @@ def get_nouns(result):
 
 noun_list = get_nouns(result)
 
+def get_decl(noun): 
+
+    '''
+    Parameters: genitive noun
+    Returns: declension the noun is a part of 
+    '''
+   
+    if noun.endswith('ae'): 
+        return 1
+    if noun.endswith('ei'): 
+        return 5
+    if noun.endswith('i'): 
+        return 2
+    if noun.endswith('is'): 
+        return 3
+    if noun.endswith('us'): 
+        return 4
+
+
+def find_noun_base (noun): 
+    
+    
+    endings = ['ae', 'ei', 'i', 'is', 'us']
+    for ending in endings: 
+        if noun.endswith(ending): 
+            base = noun[:-len(ending)]
+            return base 
+
 def create_vocab_list(noun_list):
     nouns_vocab_list = []
+    get_rid_of = r'[\'\;\,\(\)]'
+    pl_end = ["orum", "arum", "uum", "erum", "ium", "um"]
+    
     for noun in noun_list: 
-        if len(noun) == 3: 
-            get_rid_of = r'[\'\;\,\(\)]'
-            noun_dict = ({"nom": re.sub(get_rid_of, '', noun[0]),
-                "gen": re.sub(get_rid_of, '', noun[1]),
-                "gender": re.sub(get_rid_of, '', noun[2])})
+        if len(noun) == 3 and not re.sub(get_rid_of, '', noun[1]).endswith(tuple(pl_end)): # get rid of plural nouns and any noun that doesn't have nom, gen, and gender listed
+            
+            nom = re.sub(get_rid_of, '', noun[0])
+            gen = re.sub(get_rid_of, '', noun[1])
+            noun_base = find_noun_base(gen)
+            decl = get_decl(gen)
+            gender = re.sub(get_rid_of, '', noun[2])
+            noun_dict = ({"nom": nom,
+                "noun_base": noun_base,
+                "noun_decl": decl,
+                "gender": gender})
             #noun = noun_dict
+             
             nouns_vocab_list.append(noun_dict)
     return nouns_vocab_list
 
+## add declension number and noun base to noun dictionary, instead of using regex in grammar.py
+
 nouns_vocab_list = create_vocab_list(noun_list)
+
 
 def save_nouns(nouns_vocab_list): 
     with open('nouns.json', 'w') as fp:

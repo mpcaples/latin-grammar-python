@@ -1,10 +1,10 @@
 import json
 
-with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\vocab_scraper\nouns.json', 'r') as fp:
+with open('vocab_scraper/nouns.json', 'r') as fp:
     nouns = json.load(fp)
-with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\vocab_scraper\verbs.json', 'r') as fp:
+with open('vocab_scraper/verbs.json', 'r') as fp:
     verbs = json.load(fp)
-with open(r'C:\Users\Owner\Documents\python\latin-grammar\latin-grammar-python\vocab_scraper\adjectives.json', 'r') as fp:
+with open('vocab_scraper/adjectives.json', 'r') as fp:
     adjectives = json.load(fp)
 
 vocab = {
