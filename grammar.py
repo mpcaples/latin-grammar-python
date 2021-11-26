@@ -55,7 +55,7 @@ def make_adjective_agree (subject, adjective):
     adj = adjective["fem"]
     adjective_base = re.sub('a$', "", adj)
     if subject['gender'] == 'Feminine': 
-        return adjective_base + 'am'
+        return adjective_base + 'a'
     if subject['gender'] == 'Neuter': 
         return adjective_base + 'um'
     if subject['gender'] == 'Masculine': 
@@ -84,7 +84,6 @@ def generate_sentence ():
         verb = get_third_person_verb(verb_stem)
         adjective = random.choice(vocab["adjectives"])
         adjective = make_adjective_agree(noun_dict, adjective)
-        print(adjective)
         sentence = f'{subject} {adjective} {dir_obj} {verb}'
     else: 
         subject = make_subject(noun_dict)
