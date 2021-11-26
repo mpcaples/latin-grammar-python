@@ -33,6 +33,7 @@ def create_verb_list(verb_list):
             verb_stem_act = re.sub("re$", '', re.sub(get_rid_of, '', verb[1]))
             verb_dict = ({
                 "verb_stem_act": verb_stem_act,
+                "transitive": True, 
                 "pres_act_1st_sg": re.sub(get_rid_of, '', verb[0]),
                 "pres_act_inf": verb_stem_act + 're',
                 "perf_act_inf": re.sub(get_rid_of, '', verb[2]),
@@ -48,4 +49,5 @@ def save_verbs(verbs_vocab_list):
     with open('verbs.json', 'w') as fp:
         json.dump(verbs_vocab_list, fp)
 
-save_verbs(verbs_vocab_list)
+#save_verbs(verbs_vocab_list)
+# after saving the verbs I manually changed ALL of the intransitive verbs to {verb["transitive"]: false}, so do not mess with this file 

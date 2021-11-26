@@ -55,10 +55,10 @@ def make_adjective_agree (subject, adjective):
     adj = adjective["fem"]
     adjective_base = re.sub('a$', "", adj)
     if subject['gender'] == 'Feminine': 
-        return adjective
-    elif subject['gender'] == 'Neuter': 
+        return adjective_base + 'am'
+    if subject['gender'] == 'Neuter': 
         return adjective_base + 'um'
-    else: 
+    if subject['gender'] == 'Masculine': 
         return adjective_base + "us"
 
 def get_verb_stem (verb): 
@@ -73,19 +73,25 @@ def generate_sentence ():
     '''
     Generates a sentence randomly, from a trivial subset of the Latin language.  
     '''
-    subject_base = random.choice(vocab["nouns"])
-    verb_stem = get_verb_stem(random.choice(vocab["verbs"]))
-    subject = make_subject(random.choice(vocab["nouns"]))
-    
-    dir_obj = random.choice(vocab["nouns"])
-    dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj))
-    verb = get_third_person_verb(verb_stem)
-    adjective = random.choice(vocab["adjectives"])
-    adjective = make_adjective_agree(subject_base, adjective)
-    if type(adjective) == str:
+    noun_dict = random.choice(vocab["nouns"])
+    verb_dict = random.choice(vocab["verbs"])
+    verb_stem = get_verb_stem(verb_dict)
+    if verb_dict["transitive"] == True: 
+        subject = make_subject(noun_dict)
+        
+        dir_obj = random.choice(vocab["nouns"])
+        dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj))
+        verb = get_third_person_verb(verb_stem)
+        adjective = random.choice(vocab["adjectives"])
+        adjective = make_adjective_agree(noun_dict, adjective)
+        print(adjective)
         sentence = f'{subject} {adjective} {dir_obj} {verb}'
     else: 
-        sentence = generate_sentence()
+        subject = make_subject(noun_dict)
+        verb = get_third_person_verb(verb_stem)
+        adjective = random.choice(vocab["adjectives"])
+        adjective = make_adjective_agree(noun_dict, adjective)
+        sentence = f'{subject} {adjective} {verb}' 
     return sentence 
 
 
