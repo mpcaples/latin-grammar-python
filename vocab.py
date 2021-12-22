@@ -7,6 +7,8 @@ with open('vocab_scraper/verbs.json', 'r') as fp:
 with open('vocab_scraper/adjectives.json', 'r') as fp:
     adjectives = json.load(fp)
 
+
+
 vocab = {
     "nouns": nouns, 
     "verbs": verbs, 
