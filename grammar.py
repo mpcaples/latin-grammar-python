@@ -77,19 +77,19 @@ def generate_sentence ():
     verb_dict = random.choice(vocab["verbs"])
     verb_stem = get_verb_stem(verb_dict)
     if verb_dict["transitive"] == True: 
-        subject = make_subject(noun_dict)
+        subject = make_subject(noun_dict).lower()
         
         dir_obj = random.choice(vocab["nouns"])
-        dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj))
-        verb = get_third_person_verb(verb_stem)
+        dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj)).lower()
+        verb = get_third_person_verb(verb_stem).lower()
         adjective = random.choice(vocab["adjectives"])
-        adjective = make_adjective_agree(noun_dict, adjective)
+        adjective = make_adjective_agree(noun_dict, adjective).lower()
         sentence = f'{subject} {adjective} {dir_obj} {verb}'
     else: 
-        subject = make_subject(noun_dict)
-        verb = get_third_person_verb(verb_stem)
+        subject = make_subject(noun_dict).lower()
+        verb = get_third_person_verb(verb_stem).lower()
         adjective = random.choice(vocab["adjectives"])
-        adjective = make_adjective_agree(noun_dict, adjective)
+        adjective = make_adjective_agree(noun_dict, adjective).lower()
         sentence = f'{subject} {adjective} {verb}' 
     return sentence 
 
