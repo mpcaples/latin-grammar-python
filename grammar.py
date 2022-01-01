@@ -47,6 +47,34 @@ def make_DO_version2 (base, decl):
     accusative = base + acc_endings[decl] 
     return accusative
 
+def make_ablative (base, decl): 
+    '''
+    Returns the ablative form of a noun based on its base and declension
+    '''
+    abl_sg_endings = {
+        1: "a", 
+        2: "o", 
+        3: "e", 
+        4: "u", 
+        5: "e"
+    }
+    ablative = base + abl_sg_endings[decl]
+    return ablative
+make_ablative('domin-', 2)
+
+def make_abl_agent (ablative): 
+    '''Returns ablative of agent prepositional phrase, given an ablative form of a noun
+    '''
+
+    # if ablative starts with a, return "ab" else return "a"
+    vowels = ['a', 'i', 'e', 'o', 'u']
+    for vowel in vowels: 
+        if ablative.lower().startswith(vowel): 
+            return f'ab {ablative}'
+    else: 
+        return f'a {ablative}'
+#noun_test = random.choice(vocab["nouns"])
+#print(make_abl_agent(make_ablative(find_noun_base(noun_test), get_decl(noun_test))))
 def make_adjective_agree (subject, adjective):
     '''
     Returns an adjective that agrees in case, number, and gender with the noun which is in the parameter 
@@ -68,30 +96,60 @@ def get_third_person_verb (verb_stem):
     verb = verb_stem + 't'
     return verb
 
+def get_third_person_passive_verb (verb_stem): 
+    verb = verb_stem + 'tur'
+    return verb
+
+def choose_sentence_type(): 
+    sentence_types = ["active", "passive"]
+    return random.choice(sentence_types)
 
 def generate_sentence (): 
+
     '''
     Generates a sentence randomly, from a trivial subset of the Latin language.  
     '''
-    noun_dict = random.choice(vocab["nouns"])
-    verb_dict = random.choice(vocab["verbs"])
-    verb_stem = get_verb_stem(verb_dict)
-    if verb_dict["transitive"] == True: 
+
+    #choose whether sentence is active or passive 
+    sentence_type = choose_sentence_type()
+    if sentence_type == "active": 
+    
+        noun_dict = random.choice(vocab["nouns"])
+        verb_dict = random.choice(vocab["verbs"])
+        verb_stem = get_verb_stem(verb_dict)
+        if verb_dict["transitive"] == True: 
+            subject = make_subject(noun_dict).lower()
+            
+            dir_obj = random.choice(vocab["nouns"])
+            dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj)).lower()
+            verb = get_third_person_verb(verb_stem).lower()
+            adjective = random.choice(vocab["adjectives"])
+            adjective = make_adjective_agree(noun_dict, adjective).lower()
+            sentence = f'{subject} {adjective} {dir_obj} {verb}'
+        else: 
+            subject = make_subject(noun_dict).lower()
+            verb = get_third_person_verb(verb_stem).lower()
+            adjective = random.choice(vocab["adjectives"])
+            adjective = make_adjective_agree(noun_dict, adjective).lower()
+            sentence = f'{subject} {adjective} {verb}' 
+        return sentence
+
+    elif sentence_type == "passive": 
+        noun_dict = random.choice(vocab["nouns"])
+        verb_dict = random.choice(vocab["verbs"])
+        if verb_dict["transitive"] == False: 
+            verb_dict = random.choice(vocab["verbs"])
+            verb_stem = get_verb_stem(verb_dict)
+        else: 
+            verb_stem = get_verb_stem(verb_dict)
+
         subject = make_subject(noun_dict).lower()
-        
-        dir_obj = random.choice(vocab["nouns"])
-        dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj)).lower()
-        verb = get_third_person_verb(verb_stem).lower()
-        adjective = random.choice(vocab["adjectives"])
-        adjective = make_adjective_agree(noun_dict, adjective).lower()
-        sentence = f'{subject} {adjective} {dir_obj} {verb}'
-    else: 
-        subject = make_subject(noun_dict).lower()
-        verb = get_third_person_verb(verb_stem).lower()
-        adjective = random.choice(vocab["adjectives"])
-        adjective = make_adjective_agree(noun_dict, adjective).lower()
-        sentence = f'{subject} {adjective} {verb}' 
-    return sentence 
+        ablative_dict = random.choice(vocab['nouns'])
+        abl_agent = make_abl_agent(make_ablative(find_noun_base(ablative_dict), get_decl(ablative_dict)))
+        verb = get_third_person_passive_verb(verb_stem).lower()
+        sentence = f'{subject} {abl_agent} {verb}'
+        return sentence
+
 
 
 
