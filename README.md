@@ -1,5 +1,13 @@
 # latin-grammar-python 
 
-A program that generates a random sentence in Latin, using a limited amount of vocabulary and grammatical constructions.
+Sentence generator and vocabulary tool, which uses Python, web scraping, and HTML parsing technologies to generate Latin vocabulary from the web and rule based code to generate sentences in Latin
 
-[View Live](https://latin-sentence-generator.onrender.com/)
+[View Live Here](https://latin-sentence-generator.onrender.com/)
+
+## Installation 
+
+`pip install -r requirements.txt`
+
+## Run locally 
+
+`python app.py`
