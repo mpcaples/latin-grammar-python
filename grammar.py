@@ -120,19 +120,26 @@ def generate_sentence ():
         if verb_dict["transitive"] == True: 
             subject = make_subject(noun_dict).lower()
             
-            dir_obj = random.choice(vocab["nouns"])
-            dir_obj = make_DO_version2(find_noun_base(dir_obj), get_decl(dir_obj)).lower()
+            dir_obj_raw = random.choice(vocab["nouns"])
+            dir_obj = make_DO_version2(find_noun_base(dir_obj_raw), get_decl(dir_obj_raw)).lower()
             verb = get_third_person_verb(verb_stem).lower()
-            adjective = random.choice(vocab["adjectives"])
-            adjective = make_adjective_agree(noun_dict, adjective).lower()
+            adjective_raw = random.choice(vocab["adjectives"])
+            adjective = make_adjective_agree(noun_dict, adjective_raw).lower()
             sentence = f'{subject} {adjective} {dir_obj} {verb}'
+            sentence_info_dict = {"subject": noun_dict, 
+                           "verb": verb_dict, 
+                           "dir_obj": dir_obj_raw, 
+                           "adjective": adjective_raw}
         else: 
             subject = make_subject(noun_dict).lower()
             verb = get_third_person_verb(verb_stem).lower()
-            adjective = random.choice(vocab["adjectives"])
-            adjective = make_adjective_agree(noun_dict, adjective).lower()
+            adjective_raw = random.choice(vocab["adjectives"])
+            adjective = make_adjective_agree(noun_dict, adjective_raw).lower()
             sentence = f'{subject} {adjective} {verb}' 
-        return sentence
+            sentence_info_dict = {"subject": noun_dict, 
+                                  "adjective": adjective_raw, 
+                                  "verb": verb_dict}
+        return {"sentence": sentence, "sentence_info_dict": sentence_info_dict}
 
     elif sentence_type == "passive": 
         noun_dict = random.choice(vocab["nouns"])
@@ -148,7 +155,10 @@ def generate_sentence ():
         abl_agent = make_abl_agent(make_ablative(find_noun_base(ablative_dict), get_decl(ablative_dict)))
         verb = get_third_person_passive_verb(verb_stem).lower()
         sentence = f'{subject} {abl_agent} {verb}'
-        return sentence
+        sentence_info_dict = {"subject": noun_dict, 
+                              "verb": verb_dict, 
+                              "abl_agent": ablative_dict}
+        return {"sentence": sentence, "sentence_info_dict": sentence_info_dict}
 
 
 

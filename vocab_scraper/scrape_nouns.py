@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import string
 import json
 
 
@@ -14,7 +15,7 @@ results = soup.find(id="page-content")
 
 nouns = results.get_text()
 
-result = re.findall('\(.*?\)', nouns)
+result = re.findall('\((.*)', nouns)
 
 def get_nouns(result): 
     nounsss = []
@@ -26,8 +27,16 @@ def get_nouns(result):
         elif res.endswith('(-ium)'):
             res = None
         else: 
-            res = list(res.split(" "))
-            nounsss.append(res)
+            res = res
+            
+            result_split = res.split(")")[0]
+            word = list((result_split.split(" ")))
+            trans = list((res.split(")")[1]).split(" "))
+
+            nounsss.append({
+                "word": word, 
+                "trans": trans
+            })
     return nounsss
 
 noun_list = get_nouns(result)
@@ -38,7 +47,7 @@ def get_decl(noun):
     Parameters: genitive noun
     Returns: declension the noun is a part of 
     '''
-   
+
     if noun.endswith('ae'): 
         return 1
     if noun.endswith('ei'): 
@@ -53,7 +62,6 @@ def get_decl(noun):
 
 def find_noun_base (noun): 
     
-    
     endings = ['ae', 'ei', 'i', 'is', 'us']
     for ending in endings: 
         if noun.endswith(ending): 
@@ -62,24 +70,32 @@ def find_noun_base (noun):
 
 def create_vocab_list(noun_list):
     nouns_vocab_list = []
-    get_rid_of = r'[\'\;\,\(\)]'
+    get_rid_of = r'[\'\;\,\(\)\-]'
     pl_end = ["orum", "arum", "uum", "erum", "ium", "um"]
     
-    for noun in noun_list: 
-        if len(noun) == 3 and not re.sub(get_rid_of, '', noun[1]).endswith(tuple(pl_end)): # get rid of plural nouns and any noun that doesn't have nom, gen, and gender listed
+    for noun_dict in noun_list: 
+        if len(noun_dict["word"]) == 3 and not re.sub(get_rid_of, '', noun_dict["word"][1]).endswith(tuple(pl_end)): # get rid of plural nouns and any noun that doesn't have nom, gen, and gender listed
             
-            nom = re.sub(get_rid_of, '', noun[0])
-            gen = re.sub(get_rid_of, '', noun[1])
+            nom = re.sub(get_rid_of, '', noun_dict["word"][0])
+            gen = re.sub(get_rid_of, '', noun_dict["word"][1])
             noun_base = find_noun_base(gen)
             decl = get_decl(gen)
-            gender = re.sub(get_rid_of, '', noun[2])
-            noun_dict = ({"nom": nom,
-                "noun_base": noun_base,
-                "noun_decl": decl,
-                "gender": gender})
-            #noun = noun_dict
+            gender = re.sub(get_rid_of, '', noun_dict["word"][2])
+            translations = []
+            for transes in noun_dict["trans"]:
+                if transes != '' and transes != '—' and transes != ';': 
+                    transes = re.sub(get_rid_of, '', transes.lower())
+                    translations.append(transes)
+            noun_info = ({
+                    "nom": nom,
+                    "noun_base": noun_base,
+                    "noun_decl": decl,
+                    "gender": gender, 
+                    "translation": translations
+                })
              
-            nouns_vocab_list.append(noun_dict)
+            nouns_vocab_list.append(noun_info)
+    print(nouns_vocab_list)
     return nouns_vocab_list
 
 ## add declension number and noun base to noun dictionary, instead of using regex in grammar.py
