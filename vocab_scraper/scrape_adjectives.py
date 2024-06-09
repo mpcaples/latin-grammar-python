@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import re
 import json
 
-## Scrape Verbs 
 
 URL ='http://latindictionary.wikidot.com/printer--friendly/portable:latin-adjectives'
 page = requests.get(URL)
@@ -14,13 +13,21 @@ results = soup.find(id="page-content")
 
 adjectives = results.get_text()
 
-result = re.findall('\(.*?\)', adjectives)
+result = re.findall('\((.*)', adjectives)
 
 def get_adjectives(result): 
     adjectives = []
     for res in result: 
-        res = list(res.split(" "))
-        adjectives.append(res)
+        res = res
+            
+        result_split = res.split(")")[0]
+        word = list((result_split.split(" ")))
+        trans = (res.split(")")[1]).replace(';', ',')
+        trans = list(trans.split(","))
+        adjectives.append({
+            "word": word,
+            "trans": trans
+        })
     return adjectives
 
 adjective_list = get_adjectives(result)
@@ -28,13 +35,21 @@ adjective_list = get_adjectives(result)
 def create_adjective_list(adjective_list):
     adjectives_vocab_list = []
     for adj in adjective_list: 
-        if len(adj) == 3: 
+        if len(adj["word"]) == 3: 
             get_rid_of = r'[\'\;\,\(\)]'
-            adj_dict = ({"masc": re.sub(get_rid_of, '', adj[0]),
-                "fem": re.sub(get_rid_of, '', adj[1]),
-                "neut": re.sub(get_rid_of, '', adj[2])})
+            translations = []
+            for transes in adj["trans"]:
+                transes = transes.replace(' — ', '').strip().lower()
+                translations.append(transes)
+            adj_dict = ({
+                "masc": re.sub(get_rid_of, '', adj["word"][0]),
+                "fem": re.sub(get_rid_of, '', adj["word"][1]),
+                "neut": re.sub(get_rid_of, '', adj["word"][2]), 
+                "translation": translations
+            })
            
             adjectives_vocab_list.append(adj_dict)
+    print(adjectives_vocab_list)
     return adjectives_vocab_list
 
 adj_vocab_list = create_adjective_list(adjective_list)
