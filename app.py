@@ -1,7 +1,9 @@
 from flask import Flask, render_template, jsonify 
+from flask_cors import CORS 
 from grammar import generate_sentence
 
 app = Flask(__name__)
+CORS(app) 
 
 @app.route("/")
 def sentence():
